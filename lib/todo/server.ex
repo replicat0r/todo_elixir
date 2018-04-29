@@ -1,8 +1,8 @@
 defmodule Todo.Server do
   use GenServer
 
-  def start do
-    GenServer.start(Todo.Server, nil)
+  def start(todo_list_name) do
+    GenServer.start(Todo.Server,todo_list_name)
   end
 
   def add_entry(todo_server, new_entry) do
@@ -14,7 +14,7 @@ defmodule Todo.Server do
   end
 
 
-  def init(_) do
+  def init(todo_list_name) do
     {:ok, Todo.List.new}
   end
 

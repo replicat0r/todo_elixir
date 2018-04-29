@@ -4,6 +4,7 @@ defmodule Todo.Cache do
     ## Client 
     def start do
         GenServer.start(__MODULE__, nil)
+ 
     end
     
     def server_process(cach_pid, todo_list_name) do
@@ -13,6 +14,7 @@ defmodule Todo.Cache do
     
     ## Server Api
     def init(_) do
+        Todo.Database.start("./persist/")
         {:ok, HashDict.new}
     end
     
@@ -21,7 +23,7 @@ defmodule Todo.Cache do
         {:ok, todo_server} ->
             {:reply, todo_server, todo_servers}
         :error ->
-        {:ok, new_server} = Todo.Server.start
+        {:ok, new_server} = Todo.Server.start(todo_list_name)
         {
             :reply, new_server, HashDict.put(todo_servers, todo_list_name, new_server)
         }
